@@ -1,0 +1,70 @@
+<%@ page import="com.PAF.Item"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    
+<%
+	//Insert items
+	if (request.getParameter("itemCode") != null){
+	 
+		 Item itemObj = new Item(); 
+		 String stsMsg = itemObj.insertItem(request.getParameter("itemCode"), 
+						 request.getParameter("itemName"), 
+						 request.getParameter("itemPrice"), 
+						 request.getParameter("itemDesc")); 
+		 
+		  session.setAttribute("statusMsg", stsMsg); 
+	 }
+
+	//Delete items
+	if (request.getParameter("itemID") != null) {
+		
+		 Item itemObj = new Item(); 
+		 String stsMsg = itemObj.deleteItem(request.getParameter("itemID")); 
+		 session.setAttribute("statusMsg", stsMsg); 
+	 } 
+%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+
+<link rel="stylesheet" href="Views/bootstrap.min.css">
+<script src="Components/jquery-3.2.1.min.js"></script>
+<script src="Components/items.js"></script>
+
+</head>
+<body>
+	<div class="container">
+ 		<div class="row">
+ 			<div class="col">
+ 				<h1>Items Management</h1>
+				<form method="post" action="items.jsp">
+					Item code: <input id="itemCode" name="itemCode" type="text" class="form-control form-control-sm"><br>
+					Item name: <input id="itemName" name="itemName" type="text" class="form-control form-control-sm"><br>
+					Item price: <input id="itemPrice" name="itemPrice" type="text" class="form-control form-control-sm"><br>
+					Item description: <input id="itemDesc" name="itemDesc" type="text" class="form-control form-control-sm"><br>
+					<input id="btnSubmit" name="btnSubmit" type="button" value="save" class="btn btn-primary">
+					<input type="hidden" id="hidItemIDSave" name="hidItemIDSave" value="">
+					
+				</form>
+	
+				
+				<div class="alert alert-sucess">
+				 	<%out.print(session.getAttribute("statusMsg"));%> 
+				</div>
+				
+				<br>
+				
+				<%
+				 Item itemObj = new Item(); 
+				 out.print(itemObj.readItems()); 
+				%>
+ 
+ 			</div>
+ 		</div>
+	</div>
+	
+</body>
+</html>
