@@ -117,8 +117,42 @@ public class Item {
 		 return output; 
 	}
 	
-	public String deleteItem(String itemID)
-	{ 
+	public String updateItem(String ID, String code, String name, String price, String desc) { 
+		
+			 String output = ""; 
+			 try
+			 { 
+			 Connection con = connect(); 
+			 if (con == null) 
+			 { 
+			 return "Error while connecting to the database for updating."; 
+			 } 
+			 // create a prepared statement
+			 String query = "UPDATE items SET itemCode=?,itemName=?,itemPrice=?,itemDesc=? WHERE itemID=?"; 
+			 PreparedStatement preparedStmt = con.prepareStatement(query); 
+			 // binding values
+			 preparedStmt.setString(1, code); 
+			 preparedStmt.setString(2, name); 
+			 preparedStmt.setDouble(3, Double.parseDouble(price)); 
+			 preparedStmt.setString(4, desc); 
+			 preparedStmt.setInt(5, Integer.parseInt(ID)); 
+			// execute the statement
+			 preparedStmt.execute(); 
+			 con.close(); 
+			 String newItems = readItems(); 
+			 output = "{\"status\":\"success\", \"data\": \"" + 
+			 newItems + "\"}"; 
+			 } 
+			 catch (Exception e) 
+			 { 
+			 output = "{\"status\":\"error\", \"data\":\"Error while updating the item.\"}"; 
+			 System.err.println(e.getMessage()); 
+			 } 
+			 return output; 
+			 } 
+	
+	public String deleteItem(String itemID){
+		
 	 String output = ""; 
 	try
 	 { 
